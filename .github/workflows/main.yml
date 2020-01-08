@@ -25,9 +25,9 @@ jobs:
           REVERSE: false
       - run: ruby getfirst.rb
       - name: Create an issue
-        uses: DragonStuff/create-an-issue@v2.2.0
+        uses: jaygeeseman/create-an-issue@v2.2.0
         with:
-          assignees: DragonStuff
+          assignees: jaygeeseman
           filename: found_properties.txt
         continue-on-error: true
         env:
@@ -37,7 +37,7 @@ jobs:
         with:
           name: apartments.db
           path: apartments.db
-      - uses: DragonStuff/git-auto-commit-action@v2.5.0
+      - uses: jaygeeseman/git-auto-commit-action@v2.5.0
         with:
           commit_message: Pushing new apartment db automatically.
           branch: ${{ github.ref }}
