@@ -1,10 +1,4 @@
-require 'sequel'
-require 'json'
-require 'net/http'
-require 'uri'
-require 'bigdecimal'
-
-DB = Sequel.connect('sqlite://apartments.db')
+load 'app.rb'
 
 DB.create_table :apartments do
   primary_key :id
@@ -36,14 +30,13 @@ def openthis(url)
 end
 
 # Get data from API and parse into object
-api_url = "https://apts.jp/api/properties.json?rent_range[max]=200000&bedroom_range[min]=0&rent_range[min]="
-puts api_url
-response = openthis(api_url)
+puts API_SEARCH_URL
+response = openthis(API_SEARCH_URL)
 data = JSON.parse(response)
 
 x = 0
 
-while data['page']['current_page'].to_i != data['page']['total_pages'].to_i + 1
+until data['page']['current_page'].to_i != data['page']['total_pages'].to_i + 1
     data['properties'].each do |child|
         print "Looking at property with ID " + child['id'].to_s + "..."
         x = x + 1
@@ -70,7 +63,7 @@ while data['page']['current_page'].to_i != data['page']['total_pages'].to_i + 1
         puts "done."
     end
 
-    api_url = "https://apts.jp/api/properties.json?rent_range[max]=200000&bedroom_range[min]=0&rent_range[min]=" + "&page=" + (data['page']['current_page'] + 1).to_s
+    api_url = API_SEARCH_URL + "&page=" + (data['page']['current_page'] + 1).to_s
     response = openthis(api_url)
     data = JSON.parse(response)
 end
